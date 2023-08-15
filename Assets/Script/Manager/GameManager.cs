@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
 	// current state
 	public bool StartCreateZombie = true;
 	private int zOrderIndex = 0;
+	private bool firstStart = true;
 	public CreateMode createMode = CreateMode.Table;
 	public bool gameStart;
 	public int curLevelId = 1;
@@ -66,6 +67,7 @@ public class GameManager : MonoBehaviour
 		UIManager.Instance.InitUI();
 		CreateZombie();
 		InvokeRepeating("CreateSunDown", 10, 10);
+		SoundManager.Instance.PlayBGM(Globals.BGM1);
 	}
 	public void CreateZombie() {
 		curProgressZombie = new Dictionary<GameObject, int>();
@@ -93,6 +95,10 @@ public class GameManager : MonoBehaviour
 	IEnumerator ITableCreateZombie(LevelItem levelItem)
 	{
 		yield return new WaitForSeconds(levelItem.createTime);
+		if(firstStart) {
+			SoundManager.Instance.PlaySound(Globals.S_TheZombiesAreComing);
+			firstStart = false;
+		}
 		GameObject zombiePrefab = Resources.Load("Prefab/Zombie" + levelItem.zombieType.ToString()) as GameObject;
 		GameObject zombie = Instantiate(zombiePrefab);
 		Transform zombieLine = bornParent.transform.Find("born" + levelItem.bornPos.ToString());
@@ -101,18 +107,18 @@ public class GameManager : MonoBehaviour
 		zombie.GetComponent<Renderer>().sortingOrder = zOrderIndex++;
 		curProgressZombie.Add(zombie, levelItem.bornPos);
 		System.Type type = globals.GetType();
-		PropertyInfo property = type.GetProperty("Line" + levelItem.bornPos.ToString() + "Zombie");
-		if(property != null && property.CanWrite)
-			property.SetValue(type, ((int)property.GetValue(type)) + 1);
+		FieldInfo property = type.GetField("Line" + levelItem.bornPos.ToString() + "Zombie");
+		if(property != null)
+			property.SetValue(globals, ((int)property.GetValue(globals)) + 1);
 	}
 	public void ZombieDead(GameObject zombie)
 	{
 		if(curProgressZombie.ContainsKey(zombie))
 		{
 			System.Type type = globals.GetType();
-			PropertyInfo property = type.GetProperty("Line" + curProgressZombie[zombie].ToString() + "Zombie");
-			if(property != null && property.CanWrite)
-				property.SetValue(type, ((int)property.GetValue(type)) - 1);
+			FieldInfo property = type.GetField("Line" + curProgressZombie[zombie].ToString() + "Zombie");
+			if(property != null)
+				property.SetValue(globals, ((int)property.GetValue(globals)) - 1);
 			curProgressZombie.Remove(zombie);
 			UIManager.Instance.UpdateProgressPanel();
 		}

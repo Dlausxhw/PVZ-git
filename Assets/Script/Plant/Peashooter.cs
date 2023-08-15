@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Windows;
@@ -20,10 +21,9 @@ public class Peashooter : Plant
 		char[] chars = transform.parent.transform.parent.name.ToCharArray();
 		chars[0] = char.ToUpper(chars[0]);
 		Type type = GameManager.Instance.globals.GetType();
-		PropertyInfo property = type.GetProperty(new string(chars) + "Zombie");
-		if(property != null && property.CanWrite)
+		FieldInfo property = type.GetField(new string(chars) + "Zombie");
+		if(property != null)
 			canShoot = (int)property.GetValue(GameManager.Instance.globals) != 0;
-        Debug.Log((int)property.GetValue(GameManager.Instance.globals));
 	}
 	void Update()
     {
@@ -36,5 +36,6 @@ public class Peashooter : Plant
     public void Shoot()
     {
 		Instantiate(PeaBullet, BulletPos.position, Quaternion.identity);
+        SoundManager.Instance.PlaySound(Globals.S_Shoot);
 	}
 }

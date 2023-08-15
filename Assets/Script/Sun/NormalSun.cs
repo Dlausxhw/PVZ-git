@@ -41,6 +41,7 @@ public class NormalSun : MonoBehaviour
 	{
 		GameManager.Instance.ChangeSunNumber(value);
 		clicked = true;
+		SoundManager.Instance.PlaySound(Globals.S_SunCollect);
 		GameObject.Destroy(gameObject);
 	}
 }

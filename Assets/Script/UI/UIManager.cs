@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -54,7 +55,9 @@ public class UIManager : MonoBehaviour
 		if(GameManager.Instance.curProgressId > 1)
 			lastProgressPercent = levelInfoItem.progressPercent[GameManager.Instance.curProgressId - 2];
 		float finalPercent = percent * (progressPercent - lastProgressPercent) + lastProgressPercent;
-		// Debug.Log(finalPercent);
 		progressPanel.SetPercent(finalPercent);
 	}
+
+
+
 }

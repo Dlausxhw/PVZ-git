@@ -12,4 +12,9 @@ public class PeaBullet: Bullet
 		base.Start();
 		transparency = true;
 	}
+	protected override void StartDestory()
+	{
+		base.StartDestory();
+		SoundManager.Instance.PlaySound(Globals.S_PeaHit);
+	}
 }

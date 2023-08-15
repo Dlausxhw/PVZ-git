@@ -12,6 +12,6 @@ public class FireBullet : Bullet
 	protected override void StartDestory()
 	{
 		base.StartDestory();
-		animator.speed = 2;
+		SoundManager.Instance.PlaySound(Globals.S_Fire);
 	}
 }

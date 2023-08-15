@@ -47,8 +47,9 @@ public class NormalZombie : Zombie
 		if(isDead) return;
 		if(collision.tag == "plant")
 		{
-			if ((damageTimer = damageTimer + Time.deltaTime) >= damageInterval)
+			if((damageTimer = damageTimer + Time.deltaTime) >= damageInterval)
 			{
+				// SoundManager.Instance.PlaySound(Globals.S_ZombieEat);
 				damageTimer = 0;
 				if(collision.GetComponent<Plant>().ChangeHealth(-damage) <= 0)
 				{

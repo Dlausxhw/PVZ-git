@@ -10,17 +10,17 @@ using UnityEditor;
 using UnityEngine;
 
 [InitializeOnLoad]
-public class Startup
+public class CreateResources
 {
 	
 	public static bool loadFile = false;
 	
-	static Startup()
+	static CreateResources()
 	{
 		if(!loadFile) return;
 		LevelInfo level = new LevelInfo();
 		LevelInfoItem item = new LevelInfoItem();
-		item.levelId = 0;
+		item.levelId = 1;
 		item.LevelName = "¹Ø¿¨1";
 		item.progressPercent.Add(0.33f);
 		item.progressPercent.Add(0.75f);

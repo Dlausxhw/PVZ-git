@@ -51,6 +51,7 @@ public class Card : MonoBehaviour
 		PointerEventData pointerEventData = data as PointerEventData;
 		curGameObject = Instantiate(plantPrefab);
 		curGameObject.transform.position = TranslateScreenToWorld(pointerEventData.position);
+		SoundManager.Instance.PlaySound(Globals.S_Seedlift);
 	}
 	public void OnDraging(BaseEventData data)
 	{
@@ -69,6 +70,7 @@ public class Card : MonoBehaviour
 				curGameObject.transform.parent = collider.transform;
 				curGameObject.GetComponent<Plant>().setPlantStart();
 				curGameObject.transform.localPosition = Vector3.zero;
+				SoundManager.Instance.PlaySound(Globals.S_Plant);
 				curGameObject = null;
 				GameManager.Instance.ChangeSunNumber(-consume);
 				timer = 0;
