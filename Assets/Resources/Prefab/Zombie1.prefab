@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2973700897333036561}
   - component: {fileID: 2602982706633625440}
   - component: {fileID: 391068797925535352}
+  - component: {fileID: -6654331312816308884}
   m_Layer: 0
   m_Name: Zombie1
   m_TagString: zombie
@@ -57,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: cd55655cea7f444498de2e0daf3d6036, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -124,11 +125,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   direction: -1
   Speed: 20
-  damageInterval: 0.25
-  damage: 30
+  damageInterval: 0.3
+  damage: 25
   healthPoint: 300
+  currentHP: 0
   isDead: 0
-  lostHeadHP: 0
+  lostHeadHP: 120
   head: {fileID: 8035759866794632278}
   lostHead: 0
 --- !u!61 &2602982706633625440
@@ -203,6 +205,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-6654331312816308884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5812940953252876794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ab0e7fb7b11fd34e850bf34efce0a40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8035759866794632278
 GameObject:
   m_ObjectHideFlags: 0

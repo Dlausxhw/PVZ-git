@@ -35,7 +35,6 @@ public class Peashooter : Plant
     }
     public void Shoot()
     {
-		Instantiate(PeaBullet, BulletPos.position, Quaternion.identity);
-        SoundManager.Instance.PlaySound(Globals.S_Shoot);
+		SoundManager.Instance.PlaySoundTimeCallback(Globals.S_Shoot, 0.45f, () => Instantiate(PeaBullet, BulletPos.position, Quaternion.identity), 0.5f);
 	}
 }

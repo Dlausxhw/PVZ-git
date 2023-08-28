@@ -14,7 +14,7 @@ public class Zombie : MonoBehaviour
     public float damage = 20;
     protected float damageTimer = 0;
     public float healthPoint = 300;
-    protected float currentHP;
+    [HideInInspector] public float currentHP;
     public bool isDead = false;
 	protected new SpriteRenderer renderer;
 
@@ -37,7 +37,7 @@ public class Zombie : MonoBehaviour
             return direction.vector3() * Speed * Time.deltaTime;
         return Vector3.zero;
     }
-	public void DieAnimatorOver()
+	public virtual void DieAnimatorOver()
 	{
 		animator.enabled = false;
 		GameManager.Instance.ZombieDead(gameObject);
@@ -46,6 +46,8 @@ public class Zombie : MonoBehaviour
 	public virtual float ChangeHealth(float damage)
 	{
 		if(isDead) return 0f;
+		GetComponent<BossMouseFlash>().FlashWhite(0.45f);
+		Invoke("StopWhiteFlash", 0.1f);
 		currentHP = Mathf.Clamp(currentHP + damage, 0, healthPoint);
 		if (currentHP <= 0)
 		{
@@ -54,4 +56,5 @@ public class Zombie : MonoBehaviour
 		}
 		return currentHP;
 	}
+	void StopWhiteFlash() => GetComponent<BossMouseFlash>().ResetFlash();
 }

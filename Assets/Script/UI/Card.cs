@@ -7,10 +7,11 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Unity.VisualScripting;
 using System.Security.Cryptography;
+using UnityEditor.Experimental.GraphView;
+using Microsoft.Win32.SafeHandles;
+using DG.Tweening;
 
-
-
-public class Card : MonoBehaviour
+public class Card : MonoBehaviour, IPointerClickHandler
 {
 	public GameObject plantPrefab;
 	private GameObject curGameObject;
@@ -20,16 +21,30 @@ public class Card : MonoBehaviour
     public float interval;
 	public int consume;
 	private float timer;
+	public PlantInfoItem plantInfo;
+	public bool hasUse = false;
+	public bool hasLock = false;
+	public bool isMoving = false;
+	public bool hasStart = false;
 	private void Start()
 	{
 		if(darkBg == null)
 			darkBg = transform.Find("dark").gameObject;
 		if(progressBar == null)
 			progressBar = transform.Find("progress").gameObject;
+		darkBg.SetActive(false);
+		progressBar.SetActive(false);
 	}
 	private void Update()
 	{
-		timer += Time.deltaTime;
+        if(!GameManager.Instance.gameStart) return;
+		if(!hasStart)
+		{
+			hasStart = true;
+			darkBg.SetActive(true);
+			progressBar.SetActive(true);
+		}
+        timer += Time.deltaTime;
 		UpdateProgress();
 		UpdateDarkBg();
 	}
@@ -47,7 +62,7 @@ public class Card : MonoBehaviour
 	}
 	public void OnBeginDrag(BaseEventData data)
 	{
-		if(darkBg.activeSelf) return;
+		if(darkBg.activeSelf || !hasStart) return;
 		PointerEventData pointerEventData = data as PointerEventData;
 		curGameObject = Instantiate(plantPrefab);
 		curGameObject.transform.position = TranslateScreenToWorld(pointerEventData.position);
@@ -86,5 +101,61 @@ public class Card : MonoBehaviour
 	{
 		Vector3 cameraTranslatePos = Camera.main.ScreenToWorldPoint(position);
 		return new Vector3(cameraTranslatePos.x, cameraTranslatePos.y, 0);
+	}
+
+	public void OnPointerClick(PointerEventData eventData)
+	{
+		if(isMoving) return;
+		if(hasLock) return;
+		if(hasUse) RemoveCard(gameObject);
+		else AddCard();
+	}
+	public void RemoveCard(GameObject removeCard)
+	{
+		if(GameManager.Instance.gameStart) return;
+		ChooseCardPanel chooseCardPanel = UIManager.Instance.chooseCardPanel;
+		if(chooseCardPanel.ChooseCard.Contains(removeCard))
+		{
+			removeCard.GetComponent<Card>().isMoving = true;
+			chooseCardPanel.ChooseCard.Remove(removeCard);
+			chooseCardPanel.UpdateCardPosition();
+			Transform cardParent = UIManager.Instance.allCardPanel.Bg.transform.Find("Card" + removeCard.GetComponent<Card>().plantInfo.plantId);
+			Vector3 curPosition = removeCard.transform.position;
+			removeCard.transform.SetParent(UIManager.Instance.transform, false);
+			removeCard.transform.position = curPosition;
+			removeCard.transform.DOMove(cardParent.position, 0.3f).OnComplete(
+				() =>
+				{
+					cardParent.Find("BeforeCard").GetComponent<Card>().hasLock = false;
+					cardParent.Find("BeforeCard").GetComponent<Card>().darkBg.SetActive(false);
+					removeCard.GetComponent<Card>().isMoving = false;
+					Destroy(removeCard);
+				});
+		}
+	} 
+	public void AddCard()
+	{
+		ChooseCardPanel chooseCardPanel = UIManager.Instance.chooseCardPanel;
+		int curIndex = chooseCardPanel.ChooseCard.Count;
+		if(curIndex >= chooseCardPanel.cardLength) return;
+		GameObject useCard = Instantiate(plantInfo.cardPrefab);
+		useCard.transform.SetParent(UIManager.Instance.transform);
+		useCard.transform.position = transform.position;
+		useCard.name = "Card";
+		useCard.GetComponent<Card>().plantInfo = plantInfo;
+		hasLock = true;
+		darkBg.SetActive(true);
+		Transform targetObject = chooseCardPanel.cards.transform.Find("Card" + curIndex);
+		useCard.GetComponent<Card>().isMoving = true;
+		useCard.GetComponent<Card>().hasUse = true;
+		chooseCardPanel.ChooseCard.Add(useCard);
+		SoundManager.Instance.PlaySound(Globals.S_Seedlift);
+		useCard.transform.DOMove(targetObject.position, 0.3f).OnComplete(
+			() =>
+			{
+				useCard.transform.SetParent(targetObject, false);
+				useCard.transform.localPosition = Vector3.zero;
+				useCard.GetComponent<Card>().isMoving = false;
+			});
 	}
 }

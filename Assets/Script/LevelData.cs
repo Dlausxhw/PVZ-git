@@ -13,7 +13,7 @@ public class LevelItem
 	public int id;
 	public int levelId;
 	public int progressId;
-	public int createTime;
+	public float createTime;
 	public int zombieType;
 	public int bornPos;
 	public override string ToString()

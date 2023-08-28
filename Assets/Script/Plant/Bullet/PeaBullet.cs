@@ -15,6 +15,6 @@ public class PeaBullet: Bullet
 	protected override void StartDestory()
 	{
 		base.StartDestory();
-		SoundManager.Instance.PlaySound(Globals.S_PeaHit);
+		SoundManager.Instance.PlaySound(Globals.S_PeaHit, 1.5f);
 	}
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,9 +11,11 @@ public class NormalSun : MonoBehaviour
     public float duration = 5;
 	[ReadOnly][SerializeField] private new SpriteRenderer renderer;
 	public Vector3 targetPosition = Vector3.zero;
-	private bool clicked = false;
+	public Transform targetRectTransform;
+	public bool distorying = false;
 	private void Start()
 	{
+		targetRectTransform = ChooseCardPanel.Instance.transform.Find("sunTargetPos").transform;
 		renderer = GetComponent<SpriteRenderer>();
 	}
 	public void SetTargetPos(Vector3 position)
@@ -21,6 +24,7 @@ public class NormalSun : MonoBehaviour
 	}
 	private void Update()
 	{
+		if(distorying) return;
 		if(targetPosition != Vector3.zero && Vector3.Distance(transform.position, targetPosition) > 0.1f)
 		{
 			transform.position = Vector3.MoveTowards(transform.position, targetPosition, 0.1f);
@@ -39,9 +43,19 @@ public class NormalSun : MonoBehaviour
 	}
 	private void OnMouseDown()
 	{
+		distorying = true;
 		GameManager.Instance.ChangeSunNumber(value);
-		clicked = true;
 		SoundManager.Instance.PlaySound(Globals.S_SunCollect);
-		GameObject.Destroy(gameObject);
+		gameObject.transform.DOMove(targetRectTransform.position, 1f).OnComplete(() => {
+			DOTween.To(() => 
+			renderer.color.a,
+					   alpha => renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, alpha),
+					   0f, 1f).OnComplete(
+				() =>
+				{
+					Destroy(gameObject);
+				});
+		});
+
 	}
 }

@@ -59,4 +59,7 @@ public class Globals
 	public const string S_DAIFU_FINAL = "Audio/Sound/Daifu/Crazydavescream";
 	public const string S_DAIFU1 = "Audio/Sound/Daifu/Crazydaveshort1";
 	public const string S_DAIFU2 = "Audio/Sound/Daifu/Crazydaveshort2";
+
+	// FirePea
+	public const string S_Fire_Pea = "Audio/Sound/firepea";
 }

@@ -14,10 +14,10 @@ public class CreateResources
 {
 	
 	public static bool loadFile = false;
-	
 	static CreateResources()
 	{
 		if(!loadFile) return;
+		/*
 		LevelInfo level = new LevelInfo();
 		LevelInfoItem item = new LevelInfoItem();
 		item.levelId = 1;
@@ -30,8 +30,9 @@ public class CreateResources
 		AssetDatabase.CreateAsset(level, "Assets/Resources/LevelInfo.asset");
 		AssetDatabase.SaveAssets();
 		AssetDatabase.Refresh();
+		*/
 		string path = Application.dataPath + "/Resources/Data/Level1.xlsx";
-		Debug.Log(path);
+		Debug.Log(path + "start create");
 		string assetName = "Level";
 		FileInfo fileInfo = new FileInfo(path);
 		LevelData levelData = (LevelData)ScriptableObject.CreateInstance(typeof(LevelData));
@@ -47,12 +48,13 @@ public class CreateResources
 				{
 					FieldInfo variable = type.GetField(worksheet.GetValue(2, j).ToString());
 					string tableValue = worksheet.GetValue(i, j).ToString();
+					if(tableValue == null) Debug.Log("i: " + i + ", j: " + j);
 					variable.SetValue(levelItem, Convert.ChangeType(tableValue, variable.FieldType));
 				}
 				levelData.levelDataList.Add(levelItem);
 			}
 		}
-		AssetDatabase.CreateAsset(levelData, "Assets/Resources/" + assetName + ".asset");
+		AssetDatabase.CreateAsset(levelData, "Assets/Resources/TableData/" + assetName + ".asset");
 		AssetDatabase.SaveAssets();
 		AssetDatabase.Refresh();
 	}

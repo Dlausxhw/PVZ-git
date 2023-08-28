@@ -156,7 +156,7 @@ MonoBehaviour:
   healthPoint: 300
   currentHP: 0
   start: 0
-  interval: 1.35
+  interval: 1.5
   PeaBullet: {fileID: 2822750088059730620, guid: 5b18c66d093e51244b59521b4eb7a4db, type: 3}
   BulletPos: {fileID: 9033138209719771439}
 --- !u!61 &2966021928708549615

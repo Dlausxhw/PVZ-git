@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,6 +44,8 @@ public class SunFlower : Plant
 			randomX = Random.Range(transform.position.x + 20, transform.position.x + 30);
 		randomY = Random.Range(transform.position.y - 20, transform.position.y + 20);
 		Sun.transform.position = new Vector3(randomX, randomY, -1);
+		Sun.transform.DOScale(0, 0.5f).From();
+		Sun.GetComponent<SpriteRenderer>().DOFade(0, 0.5f).From();
 		if(generationQuatity > 0) GenerateSunLightRecursion(generationQuatity);
 	}
 }

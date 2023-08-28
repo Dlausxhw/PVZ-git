@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
-using functions;
 
 public class NormalZombie : Zombie
 {
 	public float lostHeadHP;
 	public GameObject head;
+	private float SoundTimer = 0.5f;
+	private float SoundPlaySpeed = 0.5f;
 	[ReadOnly][SerializeField] private bool lostHead = false;
     // Start is called before the first frame update
     protected override void Start()
@@ -47,9 +48,13 @@ public class NormalZombie : Zombie
 		if(isDead) return;
 		if(collision.tag == "plant")
 		{
-			if((damageTimer = damageTimer + Time.deltaTime) >= damageInterval)
+			if((SoundTimer += Time.deltaTime) >= SoundPlaySpeed)
 			{
-				// SoundManager.Instance.PlaySound(Globals.S_ZombieEat);
+				SoundTimer = 0;
+				SoundManager.Instance.PlaySound(Globals.S_ZombieEat, 0.5f);
+			}
+			if ((damageTimer = damageTimer + Time.deltaTime) >= damageInterval)
+			{
 				damageTimer = 0;
 				if(collision.GetComponent<Plant>().ChangeHealth(-damage) <= 0)
 				{
@@ -67,5 +72,10 @@ public class NormalZombie : Zombie
 			isWalk = true;
 			animator.SetBool("walk", true);
 		}
+	}
+	protected override void Update()
+	{
+		if(isDead) { StopAllCoroutines(); }
+		base.Update();
 	}
 }

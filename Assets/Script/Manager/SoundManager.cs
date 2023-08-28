@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
@@ -27,11 +28,50 @@ public class SoundManager : MonoBehaviour
 	{
 		audioSource.Stop();
 		audioSource.clip = GetAudio(name);
+		audioSource.loop = true;
 		audioSource.Play();
 	}
-	public void StopBGM() => audioSource.Stop();
+	public void StopBGM(){
+		audioSource.loop = false;
+		audioSource.Stop();
+	}
 	public void PlaySound(string path, float volume = 1.0f)
 	{
 		audioSource.PlayOneShot(LoadAudio(path), volume);
 	}
+	public IEnumerator PlayThenCallback(float delay, System.Action callback)
+	{
+		yield return new WaitForSeconds(delay);
+		callback?.Invoke();
+	}
+
+	public void PlaySoundCallBack(string name, System.Action onEnd, float volume = 1.0f)
+	{
+		PlaySound(name, volume);
+		StartCoroutine(PlayThenCallback(GetAudio(name).length, onEnd));
+	}
+
+	public void PlaySoundTimeCallback(string name, float seconds, System.Action callback, float volume = 1.0f)
+	{
+		PlaySound(name, volume);
+		StartCoroutine(PlayThenCallback(seconds, callback));
+	}
+
+	public float GetCurrentTime() => audioSource.time;
+
+	public float GetRemainingTime() => audioSource.clip.length - audioSource.time;
+
+	public float GetClipLength() => audioSource.clip.length;
+
+	public void FadeOutBGMAndPlayNewOne(string newBgmPath)
+	{
+		// 使用 DOTween 将音量逐渐降低到 0
+		DOTween.To(() => audioSource.volume, x => audioSource.volume = x, 0, 1f)
+			.OnComplete(() => {
+				PlayBGM(newBgmPath); // 播放新的 BGM
+				DOTween.To(() => audioSource.volume, x => audioSource.volume = x, 1f, 0f);
+				//audioSource.volume = 1.0f; // 将音量重置回 1
+			});
+	}
+
 }

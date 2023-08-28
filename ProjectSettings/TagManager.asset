@@ -51,6 +51,9 @@ TagManager:
   - name: Plant
     uniqueID: 1249370801
     locked: 0
+  - name: Plant+
+    uniqueID: 2478584127
+    locked: 0
   - name: Bullet
     uniqueID: 151959225
     locked: 0

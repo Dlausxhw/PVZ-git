@@ -9,22 +9,17 @@ public class UIManager : MonoBehaviour
 	public static UIManager Instance;
 	public Text sumNumberText;
 	public ProgressPanel progressPanel;
+	public AllCardPanel allCardPanel;
+	public ChooseCardPanel chooseCardPanel;
 	private void Start()
 	{
 		Instance = this;
-		GameObject Cards = transform.Find("ChooseCardPanel").transform.Find("Cards").gameObject;
-		for(int i = 0; i < Cards.transform.childCount; i++)
-		{
-			GameObject childGameObject = Cards.transform.GetChild(i).gameObject;
-			Card childCard = childGameObject.GetComponent<Card>();
-			childCard.interval = GameManager.Instance.CD * childCard.interval;
-			childCard.consume = (int)(GameManager.Instance.consume * childCard.consume);
-		}
 	}
 	public void InitUI()
 	{
 		sumNumberText.text = GameManager.Instance.SunNumber.ToString();
 		progressPanel.gameObject.SetActive(false);
+		allCardPanel.InitCards();
 	}
 	public void UpdateUI()
 	{
@@ -56,6 +51,7 @@ public class UIManager : MonoBehaviour
 			lastProgressPercent = levelInfoItem.progressPercent[GameManager.Instance.curProgressId - 2];
 		float finalPercent = percent * (progressPercent - lastProgressPercent) + lastProgressPercent;
 		progressPanel.SetPercent(finalPercent);
+		
 	}
 
 

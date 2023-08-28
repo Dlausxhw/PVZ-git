@@ -14,6 +14,7 @@ public class ProgressPanel : MonoBehaviour
 	private GameObject FlagPrefab;
 	private RectTransform BgRectTransform;
 	private RectTransform HeadRectTransform;
+	private float offset = 0f;
 	private void Start()
 	{
 		this.Bg = transform.Find("Bg").gameObject;
@@ -31,7 +32,6 @@ public class ProgressPanel : MonoBehaviour
 		Progress.GetComponent<Image>().fillAmount = per;
 		float originPosX = BgRectTransform.position.x + BgRectTransform.sizeDelta.x / 2;
 		float width = BgRectTransform.sizeDelta.x;
-		float offset = -10;
 		HeadRectTransform.position = new Vector2(originPosX - per * width + offset, HeadRectTransform.position.y);
 	}
 	public void SetFlagPercent(float per)
@@ -40,7 +40,6 @@ public class ProgressPanel : MonoBehaviour
 		Flag.SetActive(false);
 		float originPosX = BgRectTransform.position.x + BgRectTransform.sizeDelta.x / 2;
 		float width = BgRectTransform.sizeDelta.x;
-		float offset = -10;
 		GameObject newFlag = Instantiate(FlagPrefab);
 		newFlag.SetActive(true);
 		newFlag.transform.SetParent(gameObject.transform, false);
