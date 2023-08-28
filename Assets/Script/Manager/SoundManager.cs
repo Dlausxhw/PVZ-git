@@ -74,4 +74,35 @@ public class SoundManager : MonoBehaviour
 			});
 	}
 
+	public void OkReadyStartSound(System.Action onEnd, GameObject StartText, float volume = 1.0f)
+	{
+		PlaySound(Globals.S_Relllsetplant, volume);
+		var startText = new Dictionary<string, GameObject>() {
+			{"Ok", StartText.transform.Find("Ok").gameObject},
+			{"Ready", StartText.transform.Find("Ready").gameObject},
+			{"Start", StartText.transform.Find("Start").gameObject}
+		};
+		StartCoroutine(PlayThenCallback(0f, () => {
+			startText["Ok"].SetActive(true);
+			startText["Ready"].SetActive(false);
+			startText["Start"].SetActive(false);
+		}));
+		StartCoroutine(PlayThenCallback(0.5f, () => {
+			startText["Ok"].SetActive(false);
+			startText["Ready"].SetActive(true);
+			startText["Start"].SetActive(false);
+		}));
+		StartCoroutine(PlayThenCallback(1f, () => {
+			startText["Ok"].SetActive(false);
+			startText["Ready"].SetActive(false);
+			startText["Start"].SetActive(true);
+		}));
+		StartCoroutine(PlayThenCallback(GetAudio(Globals.S_Relllsetplant).length, 
+		() => {
+			startText["Ok"].SetActive(false);
+			startText["Ready"].SetActive(false);
+			startText["Start"].SetActive(false);
+		}));
+		StartCoroutine(PlayThenCallback(GetAudio(Globals.S_Relllsetplant).length, onEnd));
+	}
 }

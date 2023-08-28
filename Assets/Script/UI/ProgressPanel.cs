@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Timeline;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +14,7 @@ public class ProgressPanel : MonoBehaviour
 	private RectTransform BgRectTransform;
 	private RectTransform HeadRectTransform;
 	private float offset = 0f;
+
 	private void Start()
 	{
 		this.Bg = transform.Find("Bg").gameObject;
@@ -30,22 +30,24 @@ public class ProgressPanel : MonoBehaviour
 	public void SetPercent(float per)
 	{
 		Progress.GetComponent<Image>().fillAmount = per;
-		float originPosX = BgRectTransform.position.x + BgRectTransform.sizeDelta.x / 2;
-		float width = BgRectTransform.sizeDelta.x;
-		HeadRectTransform.position = new Vector2(originPosX - per * width + offset, HeadRectTransform.position.y);
+
+		float originPosX = BgRectTransform.localPosition.x + BgRectTransform.rect.width / 2;
+
+		HeadRectTransform.localPosition = new Vector2(originPosX - per * BgRectTransform.rect.width + offset, HeadRectTransform.localPosition.y);
 	}
+
 	public void SetFlagPercent(float per)
 	{
-		if(per == 1) return;
+		if (per == 1) return;
 		Flag.SetActive(false);
-		float originPosX = BgRectTransform.position.x + BgRectTransform.sizeDelta.x / 2;
-		float width = BgRectTransform.sizeDelta.x;
+
+		float originPosX = BgRectTransform.localPosition.x + BgRectTransform.rect.width / 2;
+
 		GameObject newFlag = Instantiate(FlagPrefab);
 		newFlag.SetActive(true);
 		newFlag.transform.SetParent(gameObject.transform, false);
 		var newFlagRTransform = newFlag.GetComponent<RectTransform>();
-		// newFlagRTransform.position = Flag.GetComponent<RectTransform>().position;
-		newFlagRTransform.position = new Vector2(originPosX - per * width + offset, newFlagRTransform.position.y);
+		newFlagRTransform.localPosition = new Vector2(originPosX - per * BgRectTransform.rect.width + offset, newFlagRTransform.localPosition.y);
 		Head.transform.SetAsLastSibling();
 	}
 }

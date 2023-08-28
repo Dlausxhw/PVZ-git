@@ -18,12 +18,7 @@ public class Peashooter : Plant
 
     public void CheckCanShoot()
     {
-		char[] chars = transform.parent.transform.parent.name.ToCharArray();
-		chars[0] = char.ToUpper(chars[0]);
-		Type type = GameManager.Instance.globals.GetType();
-		FieldInfo property = type.GetField(new string(chars) + "Zombie");
-		if(property != null)
-			canShoot = (int)property.GetValue(GameManager.Instance.globals) != 0;
+        canShoot = GameManager.Instance.getLineZombies(GameManager.Instance.getPlantLine(gameObject)).Count != 0;
 	}
 	void Update()
     {
@@ -35,6 +30,6 @@ public class Peashooter : Plant
     }
     public void Shoot()
     {
-		SoundManager.Instance.PlaySoundTimeCallback(Globals.S_Shoot, 0.45f, () => Instantiate(PeaBullet, BulletPos.position, Quaternion.identity), 0.5f);
+		SoundManager.Instance.PlaySoundTimeCallback(Globals.S_Shoot, 0.45f, () => Instantiate(PeaBullet, BulletPos.position, Quaternion.identity), 0.35f);
 	}
 }

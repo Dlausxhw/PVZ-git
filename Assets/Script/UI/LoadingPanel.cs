@@ -30,7 +30,7 @@ public class LoadingPanel : MonoBehaviour
     private void OnBtnStart()
     {
         if(!really)
-			SceneManager.LoadScene("Menu");
+			SceneManager.LoadScene("Game");
         else operation.allowSceneActivation = true;
 		DOTween.Clear();
 

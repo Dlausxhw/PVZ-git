@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
 {
 	// Instance
     public static GameManager Instance;
-	public GlobalsVariable globals = new GlobalsVariable();
 
 	[Header("Config")]
 	// config
@@ -25,6 +24,7 @@ public class GameManager : MonoBehaviour
 	public float CD = 1.0f;
 	public float consume = 1.0f;
 	public float SunCreateSpeed = 10f;
+	public float SunCreateSpeedFirst = 10f;
 
 	[Header("prefab")]
 	// prefab
@@ -33,16 +33,18 @@ public class GameManager : MonoBehaviour
 	public LevelData levelData;
 	public LevelInfo levelInfo;
 	public PlantInfo plantInfo;
+	public GameObject StartText;
 
 	[Header("current state")]
 	// current state
 	public bool StartCreateZombie = true;
+	public bool LockedPlantCards = false;
 	private int zOrderIndex = 0;
 	private bool firstStart = true;
 	public CreateMode createMode = CreateMode.Table;
 	public bool gameStart;
 	public int curLevelId = 1;
-	public int curProgressId = 1;
+	public int curProgressId = 0;
 	public Dictionary<GameObject, int> curProgressZombie;
 
 	private void Awake() => Instance = this;
@@ -73,14 +75,14 @@ public class GameManager : MonoBehaviour
 	}
 	public void GameReallyStart()
 	{
-		SoundManager.Instance.PlaySoundCallBack(Globals.S_Relllsetplant, 
+		SoundManager.Instance.OkReadyStartSound( 
 			() =>
 			{
 				SoundManager.Instance.FadeOutBGMAndPlayNewOne(Globals.BGM1);
 				GameManager.Instance.gameStart = true;
 				CreateZombie();
-				InvokeRepeating("CreateSunDown", 10, SunCreateSpeed);
-			});
+				InvokeRepeating("CreateSunDown", SunCreateSpeedFirst, SunCreateSpeed);
+			}, StartText);
 	}
 	public void CreateZombie() {
 		curProgressZombie = new Dictionary<GameObject, int>();
@@ -120,19 +122,11 @@ public class GameManager : MonoBehaviour
 		zombie.transform.localPosition = Vector3.zero;
 		zombie.GetComponent<Renderer>().sortingOrder = zOrderIndex++;
 		curProgressZombie.Add(zombie, levelItem.bornPos);
-		System.Type type = globals.GetType();
-		FieldInfo property = type.GetField("Line" + levelItem.bornPos.ToString() + "Zombie");
-		if(property != null)
-			property.SetValue(globals, ((int)property.GetValue(globals)) + 1);
 	}
 	public void ZombieDead(GameObject zombie)
 	{
 		if(curProgressZombie.ContainsKey(zombie))
 		{
-			System.Type type = globals.GetType();
-			FieldInfo property = type.GetField("Line" + curProgressZombie[zombie].ToString() + "Zombie");
-			if(property != null)
-				property.SetValue(globals, ((int)property.GetValue(globals)) - 1);
 			curProgressZombie.Remove(zombie);
 			UIManager.Instance.UpdateProgressPanel();
 		}
@@ -152,14 +146,6 @@ public class GameManager : MonoBehaviour
 		GameObject sun = Instantiate(sunPrefab, bornPos, Quaternion.identity);
 		float y = Random.Range(leftBottom.y + 100, leftBottom.y + 30);
 		sun.GetComponent<NormalSun>().SetTargetPos(new Vector3(bornPos.x, y, 0));
-	}
-	public class GlobalsVariable
-	{
-		public int Line0Zombie = 0;
-		public int Line1Zombie = 0;
-		public int Line2Zombie = 0;
-		public int Line3Zombie = 0;
-		public int Line4Zombie = 0;
 	}
 	public int getPlantLine(GameObject plant)
 	{

@@ -112,7 +112,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
 	}
 	public void RemoveCard(GameObject removeCard)
 	{
-		if(GameManager.Instance.gameStart) return;
+		if(GameManager.Instance.gameStart || GameManager.Instance.LockedPlantCards) return;
 		ChooseCardPanel chooseCardPanel = UIManager.Instance.chooseCardPanel;
 		if(chooseCardPanel.ChooseCard.Contains(removeCard))
 		{

@@ -16,6 +16,6 @@ MonoBehaviour:
   - levelId: 0
     LevelName: "\u5173\u53611"
     progressPercent:
-    - 0.31
-    - 0.61
+    - 0.35
+    - 0.85
     - 1

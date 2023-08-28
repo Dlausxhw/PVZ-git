@@ -43,6 +43,7 @@ public class NormalSun : MonoBehaviour
 	}
 	private void OnMouseDown()
 	{
+		if(distorying) return;
 		distorying = true;
 		GameManager.Instance.ChangeSunNumber(value);
 		SoundManager.Instance.PlaySound(Globals.S_SunCollect);

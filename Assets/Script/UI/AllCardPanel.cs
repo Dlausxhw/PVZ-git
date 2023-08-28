@@ -56,7 +56,8 @@ public class AllCardPanel : MonoBehaviour
     }
     public void OnBtnStart()
     {
-        panelDown();
+        GameManager.Instance.LockedPlantCards = true;
+		panelDown();
         CameraController.Instance.endPreview().OnComplete(
             () => { GameManager.Instance.GameReallyStart(); }
             );

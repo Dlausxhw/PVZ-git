@@ -51,9 +51,5 @@ public class UIManager : MonoBehaviour
 			lastProgressPercent = levelInfoItem.progressPercent[GameManager.Instance.curProgressId - 2];
 		float finalPercent = percent * (progressPercent - lastProgressPercent) + lastProgressPercent;
 		progressPanel.SetPercent(finalPercent);
-		
 	}
-
-
-
 }
