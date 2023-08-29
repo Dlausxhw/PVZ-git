@@ -1,4 +1,5 @@
 # PVZ 函数API(重制版API)
+
 ## 枚举
 ```cs
 enum Direction;
@@ -16,7 +17,8 @@ public static Vector3 vector3(this Direction direction);
 ```cs
 public class GameManager: MonoBehaviour;
 ```
-##### 核心值:
+### GameManager共有变量
+###### 核心值instance
 ```cs
 public GameManager _instance;
 ```
