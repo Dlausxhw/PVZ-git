@@ -20,7 +20,11 @@ public class Squash : Plant
 	public int JumpDownSpeed = 1800;
 	private Vector2 AttackPosition;
 	private State curState = State.None;
-
+	protected override void Start()
+	{
+		base.Start();
+		sortingLayerName = "Plant+";
+	}
 	public override void setPlantStart()
 	{
 		base.setPlantStart();

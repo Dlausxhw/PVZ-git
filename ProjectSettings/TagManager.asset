@@ -57,6 +57,12 @@ TagManager:
   - name: Bullet
     uniqueID: 151959225
     locked: 0
+  - name: UI
+    uniqueID: 1871630779
+    locked: 0
   - name: Sun
     uniqueID: 1880328369
+    locked: 0
+  - name: Prefab
+    uniqueID: 3157148411
     locked: 0

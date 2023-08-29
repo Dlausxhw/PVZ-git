@@ -66,6 +66,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
 		PointerEventData pointerEventData = data as PointerEventData;
 		curGameObject = Instantiate(plantPrefab);
 		curGameObject.transform.position = TranslateScreenToWorld(pointerEventData.position);
+		curGameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Prefab";
 		SoundManager.Instance.PlaySound(Globals.S_Seedlift);
 	}
 	public void OnDraging(BaseEventData data)
@@ -84,6 +85,8 @@ public class Card : MonoBehaviour, IPointerClickHandler
 			{
 				curGameObject.transform.parent = collider.transform;
 				curGameObject.GetComponent<Plant>().setPlantStart();
+				curGameObject.GetComponent<Plant>().GetComponent<SpriteRenderer>().sortingLayerName = 
+					curGameObject.GetComponent<Plant>().sortingLayerName;
 				curGameObject.transform.localPosition = Vector3.zero;
 				SoundManager.Instance.PlaySound(Globals.S_Plant);
 				curGameObject = null;

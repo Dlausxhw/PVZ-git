@@ -8,6 +8,7 @@ public class Plant: MonoBehaviour
     public float healthPoint = 300;
 	public float currentHP;
 	public bool start;
+	public string sortingLayerName = "Plant";
 	protected Animator animator;
 	protected new BoxCollider2D collider;
 	protected virtual void Start()

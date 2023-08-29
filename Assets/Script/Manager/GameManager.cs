@@ -133,6 +133,24 @@ public class GameManager : MonoBehaviour
 		if(curProgressZombie.Count <= 0)
 		{
 			curProgressId++;
+			if(curProgressId < levelInfo.LevelInfoList[curLevelId - 1].progressPercent.Count)
+			{
+				StartText.transform.Find("ManyZombie").gameObject.SetActive(true);
+				SoundManager.Instance.PlaySoundTimeCallback(Globals.S_Hugewave, 2f, () =>
+				{
+					StartText.transform.Find("ManyZombie").gameObject.SetActive(false);
+				}, 0.5f);
+			} else
+			{
+				if(curProgressId > levelInfo.LevelInfoList[curLevelId - 1].progressPercent.Count)
+					return;
+				StartText.transform.Find("FinalWave").gameObject.SetActive(true);
+				SoundManager.Instance.PlaySoundTimeCallback(Globals.S_Finalwave, 2f, () =>
+				{
+					StartText.transform.Find("FinalWave").gameObject.SetActive(false);
+				}, 0.5f);
+			}
+			
 			TableCreateZombie();
 		}
 	}
