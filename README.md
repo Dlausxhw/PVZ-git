@@ -3,11 +3,11 @@
 ```cs
 enum Direction;
 ```
-#### 枚举Direction扩展
+### 枚举Direction扩展
 ```cs
 public static class DirectionExtensions;
 ```
-##### 方法1: 
+##### 1.方法vector3: 
 ```cs
 public static Vector3 vector3(this Direction direction);
 // 返回一个相应方向的Vector3
